@@ -12,6 +12,7 @@ app.get("/", (req, res) => {
 app.get("/itens", (req, res) => {
   res.json(lista);
 });
+
 //adiciona itens
 app.post("/itens", (req, res) => {
   const id = lista.length + 1;
@@ -22,6 +23,27 @@ app.post("/itens", (req, res) => {
   lista.push(meusDados);
 
   res.status(201).json(meusDados);
+});
+
+//Editar itens
+app.put("/itens/:id", (req, res) => {
+  const { id } = req.params;
+  const dadosAtualizados = req.body;
+
+  const itemIndex = lista.findIndex((item) => item.id === Number(id));
+
+  console.log("itemIndex >>>", itemIndex);
+
+  if (itemIndex === -1) {
+    return res.status(404).json({ error: "Item não encontrado." });
+  }
+
+  const itemAtual = lista[itemIndex];
+  const itemAtualizado = { ...itemAtual, ...dadosAtualizados };
+
+  lista[itemIndex] = itemAtualizado;
+
+  res.status(200).json(itemAtualizado);
 });
 
 const PORT = 3000;
