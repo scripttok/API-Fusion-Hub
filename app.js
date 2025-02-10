@@ -27,23 +27,18 @@ app.post("/itens", (req, res) => {
 
 //Editar itens
 app.put("/itens/:id", (req, res) => {
-  const { id } = req.params;
+  const id = Number(req.params.id);
   const dadosAtualizados = req.body;
 
-  const itemIndex = lista.findIndex((item) => item.id === Number(id));
+  const item = lista.find((item) => item.id === id);
 
-  console.log("itemIndex >>>", itemIndex);
-
-  if (itemIndex === -1) {
+  if (!item) {
     return res.status(404).json({ error: "Item não encontrado." });
   }
 
-  const itemAtual = lista[itemIndex];
-  const itemAtualizado = { ...itemAtual, ...dadosAtualizados };
+  Object.assign(item, dadosAtualizados);
 
-  lista[itemIndex] = itemAtualizado;
-
-  res.status(200).json(itemAtualizado);
+  res.status(200).json(item);
 });
 
 const PORT = 3000;
