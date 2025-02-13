@@ -25,7 +25,7 @@ app.post("/itens", (req, res) => {
   res.status(201).json(meusDados);
 });
 
-//Editar itens
+//Editar itenm
 app.put("/itens/:id", (req, res) => {
   const id = Number(req.params.id);
   const dadosAtualizados = req.body;
@@ -39,6 +39,19 @@ app.put("/itens/:id", (req, res) => {
   Object.assign(item, dadosAtualizados);
 
   res.status(200).json(item);
+});
+
+// Deleta item
+app.delete("/itens/:id", (req, res) => {
+  const { id } = req.params;
+  const index = lista.findIndex((item) => item.id === Number(id));
+
+  if (index === -1) {
+    return res.status(404).json({ mensagem: "item não encontrado" });
+  }
+  lista.splice(index, 1);
+
+  res.json({ mensagem: `o item com id ${id} deletado com sucesso !!!` });
 });
 
 const PORT = 3000;
